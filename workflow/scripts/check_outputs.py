@@ -7,13 +7,15 @@ otherwise travel under an old PASS.
 """
 
 import sys
+
+# Everything printed, and any traceback, goes to the rule's log, which is what
+# sync.sh brings back from the data machine.
+sys.stdout = sys.stderr = open(snakemake.log[0], "w", buffering=1)
+
 from pathlib import Path
 
 from bpskit import transfer
 
-# Snakemake entry point. Everything printed, and any traceback, goes to the
-# rule's log, which is what sync.sh brings back from the data machine.
-sys.stdout = sys.stderr = open(snakemake.log[0], "w", buffering=1)  # noqa: SIM115
 verdict = Path(snakemake.output[0])
 # The verdict lives at results/out/run/; the tree it clears is results/out/.
 ids = transfer.load_ids(snakemake.input.ids)

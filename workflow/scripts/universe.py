@@ -2,18 +2,19 @@
 
 import sys
 
+# Everything printed, and any traceback, goes to the rule's log.
+sys.stdout = sys.stderr = open(snakemake.log[0], "w", buffering=1)
+
 from bpskit.transfer import write_ids
 from bpskit.universe import build_universe
 
-# Everything printed, and any traceback, goes to the rule's log.
-sys.stdout = sys.stderr = open(snakemake.log[0], "w", buffering=1)  # noqa: SIM115
-P = snakemake.params
-buckets = P.buckets or {}
+buckets = snakemake.params.buckets or {}  # optional: {n, seed}
+
 universe, all_ids, summary = build_universe(
     snakemake.input.socio,
-    P.universe,
-    P.sentinels,
-    P.mid_month_day,
+    snakemake.params.universe,
+    snakemake.params.sentinels,
+    snakemake.params.mid_month_day,
     n_buckets=buckets.get("n"),
     seed=buckets.get("seed", 1),
 )
