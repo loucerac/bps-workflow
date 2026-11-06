@@ -1,0 +1,68 @@
+# Test configuration: the same keys as config/config.yaml, on the synthetic
+# delivery in .test/data (`bpskit synthetic .test/data --persons 2000`). Run with
+#   snakemake --directory .test --sdm conda
+
+delivery_root: data
+universe:
+  file: sociodemograficos.csv
+  id: COD_ID
+  sex: DESC_SEXO
+  sex_values:
+    Mujer: F
+    Hombre: M
+  birth: ANYO_NAC
+  death: ANYO_FAC
+  date_format: '%Y%m'
+sources:
+  ap:
+    file: atencion_primaria.csv
+    id: COD_ID
+    date: FECHA_INICIO_DIAGNOSTICO
+    date_format: '%Y%m%d'
+    code: COD_CIE
+    icd9_changeover: null
+  cmbd:
+    file: hospitalizaciones.csv
+    id: COD_ID
+    date: COD_FEC_INGRESO
+    date_format: '%Y%m%d'
+    code: COD_CIE
+    position: COD_POSICION
+    primary_position: 1
+    icd9_changeover: '2016-01-01'
+    episode_flags:
+      obstetric:
+      - O
+      - Z33
+      - Z34
+      - Z35
+      - Z36
+      - Z37
+      - Z39
+      - Z3A
+  bps:
+    file: patologias_bps.csv
+    id: COD_ID
+    date: FEC_INI_PATOLOGIA
+    date_format: '%Y%m'
+    code: COD_CIE
+    icd9_changeover: null
+sentinels:
+- '-1'
+- '-2'
+- '-9'
+- ''
+mid_month_day: 15
+map_icd9: true
+scale:
+  encoding: utf-8
+  csv_block_mb: 64
+  batch_rows: 5000000
+  person_batch: 2000000
+  pair_chunk: 20000000
+records:
+  from: '2015-01-01'
+  to: '2025-12-31'
+buckets:
+  n: 100
+  seed: 1

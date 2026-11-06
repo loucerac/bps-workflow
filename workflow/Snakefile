@@ -1,0 +1,32 @@
+"""The shared first step of every BPS workflow: read the delivery into a
+universe and harmonised events, report their quality, and check that nothing
+in results/out/ names a patient.
+
+Run on its own (`snakemake --directory .test --sdm conda`) to see what it does,
+or import it into an analysis workflow as a Snakemake module; see README.md.
+
+    results/work/   per-person intermediates: never leave the data machine
+    results/out/    aggregate tables, cleared by check_outputs
+"""
+
+from snakemake.utils import min_version, validate
+
+min_version("9.0")
+
+
+configfile: "config/config.yaml"
+
+
+validate(config, "schemas/config.schema.yaml")
+
+
+include: "rules/common.smk"
+
+
+rule all:
+    input:
+        BPS_OUTPUTS,
+        "results/out/run/pullable_check.txt",
+
+
+include: "rules/ingest.smk"

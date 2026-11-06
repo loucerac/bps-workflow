@@ -1,0 +1,14 @@
+# The environment the shared rules run in (--sdm conda).
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.12.14
+  - numpy=2.5.3
+  - pandas=2.3.3
+  - scipy=1.18.1
+  - pyarrow=25.0.0
+  - pyyaml=6.0.3
+  - pip
+  - pip:
+      - bpskit==0.4.0

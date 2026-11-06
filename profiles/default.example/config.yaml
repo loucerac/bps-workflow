@@ -1,0 +1,14 @@
+# Per-machine settings. Copy this directory's file to profiles/default/config.yaml
+# on the machine that holds the delivery; Snakemake reads that profile
+# AUTOMATICALLY. The example lives outside profiles/default/ on purpose: a
+# profiles/default/ holding no config.yaml makes every snakemake call refuse
+# to start.
+#
+# sync.sh push never sends profiles/default/, so a push cannot overwrite the
+# remote's path with this machine's.
+config:
+  - delivery_root=/home/cloucera/data/ELA/20260903
+# Every rule runs in its conda environment (workflow/envs/). Set here so that
+# every run on this machine uses it, dry runs included: without it Snakemake
+# computes a different software-environment hash and reruns everything.
+software-deployment-method: conda

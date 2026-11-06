@@ -1,0 +1,12 @@
+usage:
+  mandatory-flags:
+    desc: >-
+      Set delivery_root in config/config.yaml (or, per machine, in a workflow
+      profile) to the folder holding the BPS delivery, and describe its files in
+      the same config. Run with --sdm conda.
+    flags: --sdm conda
+  software-stack-deployment:
+    conda: true
+    apptainer: false
+    apptainer+conda: false
+  report: false

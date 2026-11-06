@@ -1,0 +1,32 @@
+# Every dot folder (tool state, caches, editors, scratch) except the test case
+# and CI. Dot FILES (.gitignore, .pre-commit-config.yaml, ...) stay tracked.
+/.[!.]*/
+!/.test/
+!/.github/
+.test/.snakemake/
+.test/results/
+.test/data-full/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Data and anything that came back from the data machine. Never in git.
+/data/
+/results/
+remote_logs/
+results_run.txt
+
+# Per machine: profiles/default/ carries delivery_root. The versioned template
+# is profiles/default.example/.
+profiles/default/
+.env
+
+# Holds the data machine's host name; documented in the README appendix.
+sync.sh
+
+# ~/.gitignore_global excludes *.tsv, which would silently drop the condition
+# list and the standard population from every commit.
+!config/*.tsv
+# The same global ignore excludes *.csv; the synthetic test delivery is CSV.
+!/.test/data/**/*.csv

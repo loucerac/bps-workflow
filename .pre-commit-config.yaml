@@ -1,0 +1,32 @@
+# Run with `pixi run check`, or `pixi run pre-commit install` to run on every commit.
+repos:
+  - repo: local
+    hooks:
+      # Nothing per-person or pulled from the data machine enters git. The
+      # synthetic test delivery in .test/data is the one data folder allowed.
+      - id: no-data-in-git
+        name: no results, logs or data files in git
+        language: fail
+        entry: "results, pulled logs and data files never enter git:"
+        files: '^(results|remote_logs|data)/|^\.(?!test/|github/)[^/]+/|\.(parquet|npz|npy|feather|pkl)$|(^|/)results_run\.txt$'
+      - id: ruff
+        name: ruff check
+        entry: pixi run ruff check
+        language: system
+        types: [python]
+      - id: ruff-format
+        name: ruff format
+        entry: pixi run ruff format --check
+        language: system
+        types: [python]
+      - id: snakefmt
+        name: snakefmt
+        entry: pixi run snakefmt --check
+        language: system
+        files: '(\.smk|Snakefile)$'
+      - id: snakemake-lint
+        name: snakemake --lint
+        entry: pixi run snakemake --directory .test --workflow-profile none --lint
+        language: system
+        pass_filenames: false
+        files: '^(workflow|config|\.test/config)/'

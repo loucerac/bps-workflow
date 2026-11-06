@@ -1,0 +1,99 @@
+# Configuration of the shared BPS workflow. config/README.md explains it;
+# workflow/schemas/config.schema.yaml checks it at start-up. An analysis
+# workflow importing this one as a module passes its own config, which must
+# hold these same keys.
+#
+# Paths to delivery files are relative to delivery_root.
+
+# =========================================================================== #
+# The delivery: files, columns and codes (facts about the data)
+# =========================================================================== #
+# Fallback only. The real path is a property of the machine and is set in the
+# workflow profile (profiles/default/config.yaml, from profiles/default.example/),
+# which overrides this. The run refuses to start if the folder does not exist.
+delivery_root: data/raw/20260903
+
+# The people file. Here it is the CONTROL arm of the ALS delivery: age- and
+# sex-matched to the cases, so its age structure is the case series' (mostly
+# 40-90). Age-specific and age-standardised estimates are unaffected; precision
+# at the age extremes is.
+universe:
+  file: Controles/ELA_Sociodemograficos_Controles.csv
+  id: COD_ID
+  sex: DESC_SEXO
+  sex_values: {Mujer: F, Hombre: M}
+  birth: ANYO_NAC
+  death: ANYO_FAC
+  date_format: "%Y%m"
+
+# Month-precision dates land mid-month, so the average misplacement is zero.
+mid_month_day: 15
+
+# Delivery codes for "unknown".
+sentinels: ["-1", "-2", "-9", ""]
+
+# One entry per file carrying ICD diagnoses.
+#   position / primary_position  the diagnosis-position column and the value of
+#                                the principal diagnosis
+#   episode_flags                admission types to record by code prefix; whole
+#                                episodes can then be dropped by a setting
+#   icd9_changeover              records dated before it with a V/E-led code are
+#                                ICD-9. Set it only where the changeover was
+#                                MEASURED on that file (hospitalizaciones: 98%
+#                                ICD-9 in 2015, ~0 after); otherwise only
+#                                all-digit codes are treated as ICD-9.
+# Outpatient clinics (CE) are absent: that file has the specialty and no code.
+sources:
+  ap:
+    file: Controles/ELA_Visitas_Atencion_Primaria_Controles.csv
+    id: COD_ID
+    date: FECHA_INICIO_DIAGNOSTICO
+    date_format: "%Y%m%d"
+    code: COD_CIE
+    icd9_changeover: null
+  cmbd:
+    file: Controles/ELA_Hospitalizaciones_Controles.csv
+    id: COD_ID
+    date: COD_FEC_INGRESO
+    date_format: "%Y%m%d"
+    code: COD_CIE
+    position: COD_POSICION
+    primary_position: 1
+    icd9_changeover: "2016-01-01"
+    # Conditions coded at childbirth (obesity, thyroid, hepatitis screening)
+    # inflate reproductive-age female rates in hospital data.
+    episode_flags:
+      obstetric: [O, Z33, Z34, Z35, Z36, Z37, Z39, Z3A]
+  bps:
+    file: Controles/ELA_Patologías_BPS_Controles.csv
+    id: COD_ID
+    date: FEC_INI_PATOLOGIA
+    date_format: "%Y%m"
+    code: COD_CIE
+    icd9_changeover: null
+
+# Map ICD-9 records to ICD-10 with the CMS GEM. false drops them as unmapped.
+map_icd9: true
+
+# Memory bounds for a population-sized delivery. None of these changes a result
+# (a batch-invariance check confirms it); they decide how much is held at once.
+scale:
+  encoding: utf-8           # the CSVs' encoding
+  csv_block_mb: 64          # CSV bytes parsed per streamed block
+  batch_rows: 5000000       # event rows per batch when deriving first records
+  person_batch: 2000000     # persons per batch in Lexis splitting
+  pair_chunk: 20000000      # within-person pair instances per block (trajectories)
+
+# =========================================================================== #
+# What to ingest
+# =========================================================================== #
+# Records dated outside [from, to] are not ingested. `from` is the start of
+# every look-back, the same in every source; `to` the end of the last period
+# an analysis uses.
+records:
+  from: "2015-01-01"
+  to: "2025-12-31"
+
+# Optional: assign each person to one of `n` random groups (column `bucket` of
+# the universe) for a grouped bootstrap. Leave out if no analysis needs it.
+# buckets: {n: 2000, seed: 20261008}

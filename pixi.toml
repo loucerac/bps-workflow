@@ -1,0 +1,30 @@
+# The development environment: Snakemake, conda (to build the rule
+# environment with --sdm conda) and the linters. The rules themselves run in
+# workflow/envs/bpskit.yaml.
+[workspace]
+name = "bps-workflow"
+version = "0.1.0"
+channels = ["conda-forge", "bioconda"]
+platforms = ["linux-64"]
+
+[dependencies]
+python = "3.12.*"
+snakemake = ">=9.26.1,<10"
+conda = ">=24.7.1"
+ruff = ">=0.16.7,<0.17"
+snakefmt = ">=2.0.3,<3"
+pre-commit = ">=4.6.2,<5"
+
+# The bpskit command line (transfer checks, synthetic deliveries). The exact
+# version the rules use is pinned in workflow/envs/bpskit.yaml.
+[pypi-dependencies]
+bpskit = ">=0.4,<0.5"
+
+[tasks]
+dry = "snakemake -n -c 1 --sdm conda"
+run = "snakemake -c 20 --rerun-incomplete --sdm conda"
+test-workflow = { cmd = "snakemake --directory .test --workflow-profile none --sdm conda -c 4 --resources mem_mb=8000", description = "every rule on the 2,000-person synthetic delivery in .test/data" }
+lint = { cmd = "ruff check . && snakemake --directory .test --workflow-profile none --lint", description = "ruff and snakemake --lint" }
+fmt = { cmd = "ruff format . && snakefmt workflow/", description = "format Python and Snakemake files" }
+fmt-check = "ruff format --check . && snakefmt --check workflow/"
+check = { cmd = "pre-commit run --all-files", description = "every pre-commit hook" }

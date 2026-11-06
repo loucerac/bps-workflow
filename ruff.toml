@@ -1,0 +1,9 @@
+line-length = 100
+# Snakemake injects `snakemake` into every rule script at run time.
+builtins = ["snakemake"]
+# Rule scripts import the helper modules next to them (Snakemake puts
+# workflow/scripts/ on sys.path).
+src = ["workflow/scripts"]
+
+[lint]
+select = ["E9", "E501", "F", "I"]

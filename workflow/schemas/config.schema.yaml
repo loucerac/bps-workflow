@@ -1,0 +1,110 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+description: config/config.yaml of bps-workflow
+type: object
+required:
+- delivery_root
+- universe
+- sources
+- sentinels
+- mid_month_day
+- map_icd9
+- scale
+- records
+properties:
+  delivery_root:
+    type: string
+  universe:
+    type: object
+    required:
+    - file
+    - id
+    - sex
+    - sex_values
+    - birth
+    - death
+    - date_format
+    properties:
+      sex_values:
+        type: object
+        additionalProperties:
+          enum:
+          - F
+          - M
+  sources:
+    type: object
+    minProperties: 1
+    additionalProperties:
+      type: object
+      required:
+      - file
+      - id
+      - date
+      - date_format
+      - code
+      properties:
+        position:
+          type: string
+        primary_position:
+          type: integer
+        icd9_changeover:
+          type:
+          - string
+          - 'null'
+        episode_flags:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+  sentinels:
+    type: array
+    items:
+      type: string
+  mid_month_day:
+    type: integer
+    minimum: 1
+    maximum: 28
+  map_icd9:
+    type: boolean
+  scale:
+    type: object
+    required:
+    - encoding
+    - csv_block_mb
+    - batch_rows
+    - person_batch
+    - pair_chunk
+    properties:
+      csv_block_mb:
+        type: number
+        exclusiveMinimum: 0
+      batch_rows:
+        type: integer
+        minimum: 1
+      person_batch:
+        type: integer
+        minimum: 1
+      pair_chunk:
+        type: integer
+        minimum: 1
+  records:
+    type: object
+    required:
+    - from
+    - to
+    properties:
+      from:
+        type: string
+      to:
+        type: string
+  buckets:
+    type: object
+    required:
+    - n
+    - seed
+    properties:
+      n:
+        type: integer
+        minimum: 1
+      seed:
+        type: integer
