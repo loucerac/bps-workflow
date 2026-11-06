@@ -1,0 +1,5 @@
+# Assign each person to one of n bootstrap buckets (an analysis resamples
+# buckets instead of persons). Optional, so the base test config leaves it out.
+buckets:
+  n: 100
+  seed: 1

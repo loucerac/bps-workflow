@@ -3,7 +3,7 @@
 # workflow/envs/bpskit.yaml.
 [workspace]
 name = "bps-workflow"
-version = "0.1.0"
+version = "0.1.0" # x-release-please-version
 channels = ["conda-forge", "bioconda"]
 platforms = ["linux-64"]
 
@@ -23,7 +23,8 @@ bpskit = ">=0.4,<0.5"
 [tasks]
 dry = "snakemake -n -c 1 --sdm conda"
 run = "snakemake -c 20 --rerun-incomplete --sdm conda"
-test-workflow = { cmd = "snakemake --directory .test --workflow-profile none --sdm conda -c 4 --resources mem_mb=8000", description = "every rule on the 2,000-person synthetic delivery in .test/data" }
+test-workflow = { cmd = "snakemake --directory .test --workflow-profile none --sdm conda -c 4 --resources mem_mb=8000 --show-failed-logs", description = "every rule on the 2,000-person synthetic delivery in .test/data; add --configfile .test/config/variants/<name>.yaml for a variant" }
+test-batches = { cmd = "bash .test/check_batches.sh", description = "results/out/ is byte-identical with tiny batches (scale never changes a result)" }
 lint = { cmd = "ruff check . && snakemake --directory .test --workflow-profile none --lint", description = "ruff and snakemake --lint" }
 fmt = { cmd = "ruff format . && snakefmt workflow/", description = "format Python and Snakemake files" }
 fmt-check = "ruff format --check . && snakefmt --check workflow/"

@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,5 +19,27 @@ jobs:
         run: pixi run lint
       - name: Formatting
         run: pixi run fmt-check
+
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        case:
+          - name: default
+            run: pixi run test-workflow
+          - name: bootstrap buckets
+            run: pixi run test-workflow --configfile .test/config/variants/buckets.yaml
+          - name: tiny batches give identical outputs
+            run: pixi run test-batches
+    name: test (${{ matrix.case.name }})
+    steps:
+      - uses: actions/checkout@v4
+      - uses: prefix-dev/setup-pixi@v0.8.1
+        with:
+          pixi-version: v0.81.0
+          locked: true
+          cache: true
       - name: Workflow on the synthetic test delivery
-        run: pixi run test-workflow
+        run: ${{ matrix.case.run }}

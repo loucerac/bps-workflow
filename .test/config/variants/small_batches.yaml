@@ -1,0 +1,8 @@
+# Batch sizes far below the 2,000-person delivery, and primes so batch edges do
+# not line up with anything. `scale` must never change a result, so the outputs
+# have to match the default run byte for byte (pixi run test-batches).
+scale:
+  csv_block_mb: 0.05
+  batch_rows: 997
+  person_batch: 101
+  pair_chunk: 1009

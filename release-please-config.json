@@ -1,0 +1,16 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "bootstrap-sha": "1a7d3a4366f3a196a66250787df5a919832b9a18",
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "package-name": "bps-workflow",
+      "include-component-in-tag": false,
+      "bump-minor-pre-major": true,
+      "extra-files": [
+        { "type": "generic", "path": "pixi.toml" },
+        { "type": "generic", "path": "README.md" }
+      ]
+    }
+  }
+}

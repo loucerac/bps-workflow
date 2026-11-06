@@ -1,0 +1,26 @@
+# On every push to main, release-please reads the conventional commits since the
+# last release and keeps one release PR open: the next version, its CHANGELOG
+# entry and the version bumped in pixi.toml and in README.md's module snippet.
+# Merging that PR tags vX.Y.Z and publishes a GitHub release; analysis
+# workflows then move their `tag=` to it.
+#
+# Needs "Allow GitHub Actions to create and approve pull requests" in
+# Settings > Actions > General.
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json

@@ -28,6 +28,11 @@ pixi install --locked
 pixi run test-workflow    # every rule on the synthetic delivery in .test/data
 ```
 
+`.test/config/variants/` holds config overlays for the optional branches
+(`pixi run test-workflow --configfile .test/config/variants/buckets.yaml`), and
+`pixi run test-batches` checks that the batch sizes in `scale` change no output
+byte. CI runs each of them.
+
 The first run builds the rule environment (`workflow/envs/bpskit.yaml`) with
 conda, which takes a few minutes. Everything goes to `.test/results/`:
 
@@ -62,6 +67,7 @@ universe), never the patient id.
 
 Import it as a Snakemake module, pinned to a release:
 
+<!-- x-release-please-start-version -->
 ```python
 configfile: "config/config.yaml"   # holds this workflow's keys too (config/README.md)
 
@@ -88,6 +94,7 @@ use rule check_outputs from bps with:
         FINAL_OUTPUTS,
         ids=expand("results/work/ids/{name}.parquet", name=["universe", *config["sources"]]),
 ```
+<!-- x-release-please-end -->
 
 The analysis's rules then read `results/work/universe.parquet` and
 `results/work/events/<source>.parquet`.
@@ -95,3 +102,11 @@ The analysis's rules then read `results/work/universe.parquet` and
 ## Configure it for a delivery
 
 See [config/README.md](config/README.md).
+
+## Releases
+
+Commit messages are [conventional commits](https://www.conventionalcommits.org)
+(`feat:`, `fix:`, `chore:`, ...). On every push to `main`, release-please keeps a
+release PR open with the next version and its `CHANGELOG.md` entry: `fix:` bumps
+the patch, `feat:` the minor version. Merging it tags `vX.Y.Z`; an analysis
+workflow then moves its `tag=` to the new release.
