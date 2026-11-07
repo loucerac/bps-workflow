@@ -40,7 +40,7 @@ rule ingest_source:
     resources:
         mem_mb=8000,
     params:
-        source=lambda wc: config["sources"][wc.source],
+        source=lookup(dpath="sources/{source}", within=config),
         sentinels=config["sentinels"],
         mid_month_day=config["mid_month_day"],
         map_icd9=config["map_icd9"],
