@@ -225,10 +225,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/yte-1.9.4-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-4.1.2-pyh5ded981_0.conda
       - pypi: https://files.pythonhosted.org/packages/8a/db/55a262f3606bebcae07cc14095338471ad7c0bbcaa37707e6f0ee49725b7/importlib_resources-7.1.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/91/4e/2cd7c65de78e051bfa4de590bdce66a0aa93c8d87b079ec4b24a9cf83f23/bpskit-0.4.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b6/b9/8f21f4da231f981d083c5ecf6b490c784d921f270cddcc5b613c413abffe/icd_mappings-0.6.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/d3/79/e2fc9b1317b7a21e7bcd57eb035cac3fe72f47af3efe2ec3b4dea9a08a04/pyarrow-26.0.1-cp312-cp312-manylinux_2_28_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/df/64/ff35eb9e54894cf471ff4716abd3c81eb0a0626869217ce3e6ba4ccf17d7/scipy-1.18.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+      - pypi: https://files.pythonhosted.org/packages/f7/c6/f7d2a24c92b36108a8c928f0183b9e8c36573d4e47c434add863889dacd2/bpskit-0.5.0-py3-none-any.whl
 packages:
 - conda: https://conda.anaconda.org/bioconda/noarch/snakefmt-2.1.0-pyhdfd78af_0.conda
   sha256: ee20310d6a89309e23a00beffb4bcb470460d6b87a7b17ac75a2ad6ab2ce8357
@@ -3538,18 +3538,6 @@ packages:
   - pytest-enabler>=3.4 ; extra == 'enabler'
   - pytest-mypy>=1.0.1 ; platform_python_implementation != 'PyPy' and extra == 'type'
   requires_python: '>=3.10'
-- pypi: https://files.pythonhosted.org/packages/91/4e/2cd7c65de78e051bfa4de590bdce66a0aa93c8d87b079ec4b24a9cf83f23/bpskit-0.4.0-py3-none-any.whl
-  name: bpskit
-  version: 0.4.0
-  sha256: fb0289ad44ccdbc483d2e1c9a02ec96c3e47804b3f1a3ac40511cc18c84e0345
-  requires_dist:
-  - icd-mappings>=0.6.2,<0.7
-  - numpy>=2
-  - pandas>=2.2
-  - pyarrow>=15
-  - pyyaml>=6
-  - scipy>=1.11
-  requires_python: '>=3.11'
 - pypi: https://files.pythonhosted.org/packages/b6/b9/8f21f4da231f981d083c5ecf6b490c784d921f270cddcc5b613c413abffe/icd_mappings-0.6.2-py3-none-any.whl
   name: icd-mappings
   version: 0.6.2
@@ -3608,3 +3596,15 @@ packages:
   - ruff>=0.12.0 ; extra == 'dev'
   - cython-lint>=0.12.2 ; extra == 'dev'
   requires_python: '>=3.12'
+- pypi: https://files.pythonhosted.org/packages/f7/c6/f7d2a24c92b36108a8c928f0183b9e8c36573d4e47c434add863889dacd2/bpskit-0.5.0-py3-none-any.whl
+  name: bpskit
+  version: 0.5.0
+  sha256: 6d74a4ed323156cb1be6defaa31202c9f5ea541209686145ee54f4f8fc8230ce
+  requires_dist:
+  - icd-mappings>=0.6.2,<0.7
+  - numpy>=2
+  - pandas>=2.2
+  - pyarrow>=15
+  - pyyaml>=6
+  - scipy>=1.11
+  requires_python: '>=3.11'
