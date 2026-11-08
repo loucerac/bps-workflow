@@ -74,7 +74,7 @@ configfile: "config/config.yaml"   # holds this workflow's keys too (config/READ
 
 module bps:
     snakefile:
-        github("loucerac/bps-workflow", path="workflow/Snakefile", tag="v0.1.0")
+        github("loucerac/bps-workflow", path="workflow/Snakefile", tag="v0.1.1")
     config:
         config
 
