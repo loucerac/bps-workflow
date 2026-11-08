@@ -18,7 +18,7 @@ pre-commit = ">=4.6.2,<5"
 # The bpskit command line (transfer checks, synthetic deliveries). The exact
 # version the rules use is pinned in workflow/envs/bpskit.yaml.
 [pypi-dependencies]
-bpskit = ">=0.5,<0.6"
+bpskit = ">=0.6,<0.7"
 
 [tasks]
 dry = "snakemake -n -c 1 --sdm conda"
